@@ -62,7 +62,26 @@ function getShiftDuration(startTime, endTime) {
 // Returns: string formatted as h:mm:ss
 // ============================================================
 function getIdleTime(startTime, endTime) {
-    // TODO: Implement this function
+    const startT = timeToSeconds(startTime);
+    let endT = timeToSeconds(endTime);
+    
+    if (endT < startT) {
+        endT += 24 * 3600;
+    }
+    
+    const deliveryStart = 8 * 3600; 
+    const deliveryEnd = 22 * 3600; 
+    
+    let idleT = 0;
+    
+    if (startT < deliveryStart) {
+        idleT += Math.min(deliveryStart, endT) - startT;
+    }
+    if (endT > deliveryEnd) {
+        idleT += endT - Math.max(deliveryEnd, startT);
+    }
+    
+    return secondsToTime(idleT);
 }
 
 // ============================================================
