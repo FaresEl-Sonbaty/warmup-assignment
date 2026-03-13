@@ -1,5 +1,42 @@
 const fs = require("fs");
 
+//My own helper functions:
+
+//1- time converters to and from seconds format with am/pm
+
+function timeToSeconds(timeStr) {
+    const [time, period] = timeStr.split(' ');
+    let [hours, minutes, seconds] = time.split(':').map(Number);
+    
+    if (period === 'pm' && hours !== 12) hours += 12;
+    if (period === 'am' && hours === 12) hours = 0;
+    
+    return hours * 3600 + minutes * 60 + seconds;
+}
+
+function secondsToTime(totalSeconds) {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+//2- time converters to and from seconds format without am/pm
+
+function parseTimeStr(timeStr) {
+    const [hours, minutes, seconds] = timeStr.split(':').map(Number);
+    return hours * 3600 + minutes * 60 + seconds;
+}
+
+function secondsToHours(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+
 // ============================================================
 // Function 1: getShiftDuration(startTime, endTime)
 // startTime: (typeof string) formatted as hh:mm:ss am or hh:mm:ss pm
@@ -7,7 +44,15 @@ const fs = require("fs");
 // Returns: string formatted as h:mm:ss
 // ============================================================
 function getShiftDuration(startTime, endTime) {
-    // TODO: Implement this function
+    const startT = timeToSeconds(startTime);
+    let endT = timeToSeconds(endTime);
+    
+    if (endT < startT) {
+        endT += 24 * 3600;
+    }
+    
+    const duration = endT - startT;
+    return secondsToTime(duration);
 }
 
 // ============================================================
