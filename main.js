@@ -91,7 +91,10 @@ function getIdleTime(startTime, endTime) {
 // Returns: string formatted as h:mm:ss
 // ============================================================
 function getActiveTime(shiftDuration, idleTime) {
-    // TODO: Implement this function
+    const shiftT = parseTimeStr(shiftDuration);
+    const idleT = parseTimeStr(idleTime);
+    const activeT = shiftT - idleT;
+    return secondsToTime(activeT);
 }
 
 // ============================================================
